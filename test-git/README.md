@@ -32,3 +32,12 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Important 
+```
+- The form must have a submit button that will be disabled when the inputs are not valid and
+enabled when all of the inputs are valid.
+
+- Implement a way to notify the user for the validity of an input, instructing what format or
+values are valid (or why the input is invalid).
+```
