@@ -1,6 +1,5 @@
 <template>
-  <Loading v-if="loading" />
-  <div class="pb-5 mb-5">
+  <div class="pb-5">
     <div class="row mb-5 ps-3">
       <div class="col-6">
         <h1 class="headingForm">Input vehicle information</h1>

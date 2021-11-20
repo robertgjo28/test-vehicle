@@ -5,9 +5,12 @@ import store from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 
+import Maska from "maska";
+
 const app = createApp(App);
 
 app.use(store);
 app.use(router);
+app.use(Maska);
 
 app.mount("#app");

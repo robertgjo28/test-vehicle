@@ -99,96 +99,35 @@
       <div class="col-12">
         <div class="row">
           <div class="col-md-6 mt-4">
-            <label for="plateNumber" class="form-label"
-              >License plate
-              <span>(X - alphabet character, N - number)</span></label
+            <label for="plateNumberMasked" class="form-label"
+              >License Plate</label
             >
-            <div class="input-group">
-              <input
-                type="text"
-                id="plateNumber"
-                class="form-control text-center text-uppercase"
-                v-model.trim="state.firstLicense"
-                @blur="v$.firstLicense.$touch"
-                placeholder="XX"
-                maxlength="2"
-                :class="{
-                  borderRed: v$.firstLicense.$error,
-                  borderGreen:
-                    !v$.firstLicense.$error && state.firstLicense != '',
-                }"
-                required
-              />
+            <input
+              id="plateNumberMasked"
+              type="text"
+              class="form-control text-uppercase"
+              v-maska="'SS-XXXX-SS'"
+              @blur="v$.licensePlate.$touch"
+              v-model="state.licensePlate"
+              :class="{
+                borderRed: v$.licensePlate.$error,
+                borderGreen:
+                  !v$.licensePlate.$error && state.licensePlate != '',
+              }"
+            />
 
-              <input
-                type="text"
-                v-model.number="state.numberLicense"
-                @blur="v$.numberLicense.$touch"
-                class="form-control text-center text-uppercase"
-                placeholder="NNNN"
-                maxlength="4"
-                :class="{
-                  borderRed: v$.numberLicense.$error,
-                  borderGreen:
-                    !v$.numberLicense.$error && state.numberLicense != '',
-                }"
-                required
-              />
+            <i
+              class="fas fa-times"
+              v-if="v$.licensePlate.$error && state.licensePlate === ''"
+            ></i>
+            <i
+              class="fas fa-check"
+              v-if="!v$.licensePlate.$error && state.licensePlate != ''"
+            ></i>
 
-              <input
-                type="text"
-                v-model.trim="state.lastLicense"
-                @blur="v$.lastLicense.$touch"
-                class="form-control text-center text-uppercase"
-                placeholder="XX"
-                maxlength="2"
-                :class="{
-                  borderRed: v$.lastLicense.$error,
-                  borderGreen:
-                    !v$.lastLicense.$error && state.lastLicense != '',
-                }"
-                required
-              />
-            </div>
-            <i
-              class="fas fa-check"
-              v-if="!v$.firstLicense.$error && state.firstLicense != ''"
-            ></i>
-            <i
-              class="fas fa-times"
-              v-if="v$.firstLicense.$error && state.firstLicense === ''"
-            ></i>
-            <i
-              class="fas fa-check"
-              v-if="!v$.lastLicense.$error && state.lastLicense != ''"
-            ></i>
-            <i
-              class="fas fa-times"
-              v-if="v$.lastLicense.$error && state.lastLicense === ''"
-            ></i>
-            <i
-              class="fas fa-check"
-              v-if="!v$.numberLicense.$error && state.numberLicense != ''"
-            ></i>
-            <i
-              class="fas fa-times"
-              v-if="v$.numberLicense.$error && state.numberLicense === ''"
-            ></i>
-            <div class="first">
-              <span class="text-danger" v-if="v$.firstLicense.$error">
-                {{ v$.firstLicense.$errors[0].$message }}
-              </span>
-            </div>
-            <div class="sec">
-              <span class="text-danger" v-if="v$.numberLicense.$error">
-                {{ v$.numberLicense.$errors[0].$message }}
-              </span>
-            </div>
-            <div class="third">
-              <span class="text-danger" v-if="v$.lastLicense.$error">
-                {{ v$.lastLicense.$errors[0].$message }}
-              </span>
-            </div>
+            <span class="text-danger" v-if="v$.licensePlate.$error">
+              {{ v$.licensePlate.$errors[0].$message }}
+            </span>
           </div>
         </div>
       </div>
@@ -267,30 +206,25 @@
       <!-- Submit button -->
       <div class="text-end mt-4">
         <button
-          :disabled="!formIsValid"
-          @click.prevent="submitForm"
+          :disabled="!isFormValid"
           type="submit"
           class="btn btn-submit"
+          data-bs-toggle="modal"
+          data-bs-target="#dataModal"
         >
           Submit
         </button>
       </div>
     </div>
   </form>
-  <Modal :results="result" />
+  <teleport to="body">
+    <Modal :results="result" />
+  </teleport>
 </template>
-
-// data-bs-toggle="modal" data-bs-target="#dataModal" //
 
 <script>
 import useValidate from "@vuelidate/core";
-import {
-  required,
-  helpers,
-  alpha,
-  numeric,
-  maxLength,
-} from "@vuelidate/validators";
+import { required, helpers, maxLength } from "@vuelidate/validators";
 import { reactive, computed } from "vue";
 import Modal from "./Modal.vue";
 import { uid } from "uid";
@@ -298,13 +232,15 @@ import { uid } from "uid";
 export default {
   name: "Form",
 
+  components: {
+    Modal,
+  },
+
   setup() {
     const state = reactive({
       vehicleName: "",
       vehicleType: "",
-      firstLicense: "",
-      numberLicense: "",
-      lastLicense: "",
+      licensePlate: "",
       registrationDate: "",
       registrationSubmission: new Date(),
     });
@@ -327,38 +263,15 @@ export default {
             required
           ),
         },
-        firstLicense: {
+        licensePlate: {
           required: helpers.withMessage(
             "Check that your License plate is filled out correctly.",
             required
           ),
-          alpha: helpers.withMessage(
-            "Check your input, first field must be only alphabethic characters.",
-            alpha
+          maxLength: helpers.withMessage(
+            "The license plate should be like this : XX-NNNN-XX",
+            maxLength(10)
           ),
-          maxLength: maxLength(2),
-        },
-        numberLicense: {
-          required: helpers.withMessage(
-            "Check that your License plate is filled out correctly.",
-            required
-          ),
-          numeric: helpers.withMessage(
-            "Check your input, second field must be only numbers.",
-            numeric
-          ),
-          maxLength: maxLength(4),
-        },
-        lastLicense: {
-          required: helpers.withMessage(
-            "Check that your License plate is filled out correctly.",
-            required
-          ),
-          alpha: helpers.withMessage(
-            "Check your input, third field must be only alphabethic characters.",
-            alpha
-          ),
-          maxLength: maxLength(2),
         },
         registrationDate: {
           required: helpers.withMessage(
@@ -374,24 +287,27 @@ export default {
         },
       };
     });
+    let isFormValid = computed(() => {
+      return (
+        state.vehicleName &&
+        state.vehicleType &&
+        state.licensePlate &&
+        state.registrationDate &&
+        state.registrationSubmission
+      );
+    });
 
     const v$ = useValidate(rules, state);
 
-    return { state, v$ };
-  },
-
-  components: {
-    Modal,
+    return { state, v$, isFormValid };
   },
 
   data() {
     return {
       docId: uid(6),
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
-      loading: null,
-      result: {},
-      formIsValid: null,
       model: "",
+      result: {},
       modal: false,
       models: [
         "Alfa Romeo",
@@ -421,14 +337,14 @@ export default {
     },
 
     getRegDate() {
-      return new Date(this.registrationDate).toLocaleDateString(
+      return new Date(this.state.registrationDate).toLocaleDateString(
         "en-us",
         this.dateOptions
       );
     },
 
     getRegSub() {
-      return new Date(this.registrationSubmission).toLocaleDateString(
+      return new Date(this.state.registrationSubmission).toLocaleDateString(
         "en-us",
         this.dateOptions
       );
@@ -446,14 +362,25 @@ export default {
       this.model = model;
       this.modal = false;
     },
-    checkClick(e) {
+
+    submitForm() {
+      this.result = {};
+
+      this.result = {
+        id: this.docId,
+        vehicleName: this.state.vehicleName,
+        vehicleType: this.state.vehicleType,
+        vehicleModel: this.model,
+        licensePlate: this.state.licensePlate,
+        registrationDate: this.getRegDate(),
+        registrationSubmission: this.getRegSub(),
+      };
+    },
+
+    closeClick(e) {
       if (e.target === this.$refs.modelWrap) {
         this.modal = false;
       }
-    },
-
-    submitForm() {
-      this.clearForm();
     },
 
     dateToYYYYMMDD(d) {
@@ -464,35 +391,8 @@ export default {
           .split("T")[0]
       );
     },
-
-    clearForm() {
-      this.state.vehicleName = "";
-      this.state.vehicleType = "";
-      this.state.firstLicence = "";
-      this.state.numberLicence = null;
-      this.state.lastLicence = "";
-      this.state.licenceNumber = "";
-      this.state.registrationDate = "";
-      this.state.registrationSubmission = new Date();
-    },
   },
 
-  // watch: {
-  //   formIsValid() {
-  //     if (
-  //       this.state.vehicleName === "" &&
-  //       this.state.vehicleType === "" &&
-  //       this.state.numberLicense === "" &&
-  //       this.state.firstLicense === "" &&
-  //       this.state.registrationDate === "" &&
-  //       this.state.registrationSubmission === ""
-  //     ) {
-  //       this.formIsValid = false;
-  //     } else {
-  //       this.formIsValid = true;
-  //     }
-  //   },
-  // },
   watch: {
     model() {
       this.filterModels();
@@ -561,14 +461,14 @@ ul {
 }
 .fa-check {
   float: right;
-  margin-top: -35px;
+  margin-top: -34px;
   position: relative;
   margin-right: 12px;
   color: green;
 }
 .fa-times {
   float: right;
-  margin-top: -27px;
+  margin-top: -34px;
   position: relative;
   margin-right: 12px;
   color: red;

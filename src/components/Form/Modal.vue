@@ -1,12 +1,4 @@
 <template>
-  <!-- <button
-    type="button"
-    class="btn btn-primary"
-    data-bs-toggle="modal"
-    data-bs-target="#dataModal"
-  >
-    Launch demo modal
-  </button> -->
   <div
     class="modal fade"
     id="dataModal"
@@ -15,7 +7,7 @@
     aria-hidden="true"
   >
     <div class="container">
-      <div class="modal-dialog" :class="{ removeMargins: printState }">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div>
             <div class="modal-header">
@@ -55,11 +47,11 @@
               <div class="col-12 py-2 ps-3">
                 <p>
                   <span class="fw-bold me-2">Model of the vehicle:</span>
-                  {{
+                  <span class="text-capitalize">{{
                     results.vehicleModel != ""
                       ? results.vehicleModel
                       : "Unknown"
-                  }}
+                  }}</span>
                 </p>
               </div>
               <hr style="border: 1px dashed #d1d1d1" />
@@ -70,7 +62,7 @@
                 <p>
                   <span class="fw-bold me-2">License plate number: </span>
                   <span class="text-uppercase">
-                    {{ results.licenceNumber }}</span
+                    {{ results.licensePlate }}</span
                   >
                 </p>
               </div>
@@ -117,11 +109,6 @@ import html2canvas from "html2canvas";
 export default {
   name: "Modal",
   props: ["results"],
-  data() {
-    return {
-      printState: null,
-    };
-  },
   methods: {
     downloadPDF() {
       window.html2canvas = html2canvas;
@@ -160,11 +147,6 @@ export default {
   padding: 14px 30px;
   border-radius: 2px;
   font-weight: bold;
-}
-
-.removeMargins {
-  position: absolute;
-  left: 0;
 }
 
 .btn-print:hover {
