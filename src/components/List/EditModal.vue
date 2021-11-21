@@ -19,14 +19,14 @@
           ></button>
         </div>
         <div class="modal-body px-5">
-          <form @submit.prevent="editVehilce">
+          <form>
             <div class="row">
               <label for="name" class="form-label">Vehilce Name: </label>
               <input
                 id="name"
                 type="text"
                 class="form-control mb-3"
-                @input="name"
+                @input="vehicleName = $event.target.value"
                 :value="vehicle.vehicleName"
                 required
               />
@@ -35,7 +35,7 @@
                 id="type"
                 type="text"
                 class="form-control mb-3"
-                @input="vehicleType"
+                @input="vehicleType = $event.target.value"
                 :value="vehicle.vehicleType"
                 required
               />
@@ -47,7 +47,7 @@
                 type="text"
                 v-maska="'SS-XXXX-SS'"
                 class="form-control text-uppercase mb-3"
-                @input="plateNumber"
+                @input="plateNumber = $event.target.value"
                 :value="vehicle.plateNumber"
                 required
               />
@@ -56,7 +56,7 @@
                 id="model"
                 type="text"
                 class="form-control mb-4"
-                @input="model"
+                @input="model = $event.target.value"
                 :value="vehicle.model"
                 required
               />
@@ -69,7 +69,13 @@
               >
                 Close
               </button>
-              <button type="submit" class="btn btn-submit">Save changes</button>
+              <button
+                type="submit"
+                @click.prevent="editVehilce"
+                class="btn btn-submit"
+              >
+                Save changes
+              </button>
             </div>
           </form>
         </div>
@@ -79,38 +85,33 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   name: "EditModal",
 
-  props: ["vehicle"],
+  props: {
+    vehicle: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      name: "",
+      vehEdit: null,
+      vehicleName: "",
       vehicleType: "",
       plateNumber: "",
       model: "",
-      vehEdit: {},
     };
   },
-
-  computed: {
-    ...mapState(["currentItem"]),
-  },
-
   methods: {
     editVehilce() {
-      this.vehEdit = {};
-
       this.vehEdit = {
-        name: this.name,
+        vehicleName: this.vehicleName,
         vehicleType: this.vehicleType,
         plateNumber: this.plateNumber,
         model: this.model,
       };
 
-      this.$store.dispatch("GET_CHANGED_ITEM", this.vehEdit);
       console.log(this.vehEdit);
     },
   },

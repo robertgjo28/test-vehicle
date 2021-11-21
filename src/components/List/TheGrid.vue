@@ -3,40 +3,15 @@
     <!-- Filters -->
     <div class="row mb-4">
       <div class="col-6">
+        <p class="lead">
+          Type any keyword to Research data in the table below:
+        </p>
         <input
           class="form-control"
           type="text"
           v-model="searchQuery"
-          placeholder="Search by name..."
+          placeholder="Search..."
         />
-      </div>
-      <div class="col-6">
-        <div class="dropdown">
-          <button
-            class="btn btn-submit dropdown-toggle"
-            type="button"
-            id="filterMenu"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Filter By
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="filterMenu">
-            <li>
-              <a @click.prevent="type" class="dropdown-item" value="type"
-                >Vehicle Type</a
-              >
-            </li>
-            <li>
-              <a @click.prevent="model" class="dropdown-item" href="#">Model</a>
-            </li>
-            <li>
-              <a @click.prevent="plates" class="dropdown-item" href="#"
-                >Plates</a
-              >
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
     <!-- Table -->
@@ -60,6 +35,7 @@
             <tr
               v-for="(vehicle, index) in resultQuery"
               :key="vehicle.plateNumber"
+              :vehicle-edit="vehicle"
             >
               <th class="text-center" scope="row">{{ index + 1 }}</th>
               <td class="text-capitalize">{{ vehicle.vehicleName }}</td>
@@ -71,7 +47,7 @@
                   class="far fa-edit me-3"
                   data-bs-toggle="modal"
                   data-bs-target="#editModal"
-                  @click="onEdit(index)"
+                  @click.prevent="onEdit(index)"
                 ></i>
                 <i
                   class="far fa-trash-alt"
@@ -96,6 +72,7 @@ import vehiclesData from "@/includes/vehicles.json";
 import EditModal from "../List/EditModal.vue";
 export default {
   components: { EditModal },
+  emits: ["vehicle-edit"],
   data() {
     return {
       vehicles: vehiclesData,
@@ -133,28 +110,12 @@ export default {
       this.vehicles.splice(index, 1);
     },
 
-    type() {
-      if (this.searchQuery) {
-        return this.vehicles.sort(function (a, b) {
-          return b.index - a.index;
-        });
-      } else {
-        return this.vehicles;
-      }
-    },
-
     onEdit(index) {
       if (this.vehicles.length < index) {
-        alert("OMG! Wrong!");
         return;
       }
 
-      this.currentItem = [this.vehicles[index], index];
-
-      this.$store.dispatch("GET_CURRENT_ITEM", this.currentItem);
-
-      console.log(this.currentItem);
-      console.log(index);
+      this.currentItem = this.vehicles[index];
     },
   },
 };
