@@ -7,6 +7,7 @@
           Type any keyword to Research data in the table below:
         </p>
         <input
+          :disabled="resultQuery.length <= 0"
           class="form-control"
           type="text"
           v-model="searchQuery"
@@ -22,8 +23,8 @@
           v-if="vehicles.length"
         >
           <thead>
-            <tr>
-              <th class="text-center" scope="col">#</th>
+            <tr class="align-middle">
+              <th class="text-center py-4" scope="col">#</th>
               <th scope="col">Vehilce Name</th>
               <th scope="col">Vehicle Type</th>
               <th scope="col">Plates</th>
@@ -36,19 +37,17 @@
               v-for="(vehicle, index) in resultQuery"
               :key="vehicle.plateNumber"
               :vehicle-edit="vehicle"
+              class="align-middle"
             >
-              <th class="text-center" scope="row">{{ index + 1 }}</th>
+              <th class="text-center py-4" scope="row">{{ index + 1 }}</th>
               <td class="text-capitalize">{{ vehicle.vehicleName }}</td>
-              <td>{{ vehicle.vehicleType }}</td>
-              <td>{{ vehicle.plateNumber }}</td>
-              <td class="display-hidden">{{ vehicle.model }}</td>
-              <td class="text-center">
-                <i
-                  class="far fa-edit me-3"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editModal"
-                  @click.prevent="onEdit(index)"
-                ></i>
+              <td class="text-capitalize">{{ vehicle.vehicleType }}</td>
+              <td class="text-uppercase">{{ vehicle.plateNumber }}</td>
+              <td class="text-capitalize display-hidden">
+                {{ vehicle.model }}
+              </td>
+              <td class="text-capitalize text-center">
+                <i class="far fa-edit me-3" @click.prevent="onEdit(index)"></i>
                 <i
                   class="far fa-trash-alt"
                   @click.prevent="deleteItem(index)"
@@ -59,12 +58,23 @@
         </table>
       </div>
     </div>
-    <div class="display-show">Models are hidden, they are not required.</div>
+    <div class="display-show pb-5 pt-2">
+      <p>Models are hidden, they are not required.</p>
+    </div>
+    <div class="pt-4 text-center" v-if="resultQuery.length <= 0">
+      <p class="text-danger">
+        There is no data in the list. Please refresh the page or add some!
+      </p>
+    </div>
   </div>
-
-  <teleport to="body">
-    <edit-modal :vehicle="currentItem"></edit-modal>
-  </teleport>
+  <transition name="fade">
+    <edit-modal
+      v-if="currentItem"
+      :vehicle="currentItem"
+      @modal-closed="onModalClosed"
+      @vehicle-updated="onUpdate"
+    ></edit-modal>
+  </transition>
 </template>
 
 <script>
@@ -76,7 +86,7 @@ export default {
   data() {
     return {
       vehicles: vehiclesData,
-      currentItem: {},
+      currentItem: null,
       searchQuery: null,
     };
   },
@@ -116,6 +126,17 @@ export default {
       }
 
       this.currentItem = this.vehicles[index];
+    },
+
+    onUpdate(data) {
+      if (data.length < 0) {
+        this.vehicles[data.index] = data.vehicle;
+        this.onModalClosed();
+      }
+    },
+
+    onModalClosed() {
+      this.currentItem = null;
     },
   },
 };
@@ -161,6 +182,21 @@ tr {
   font-weight: bold;
 }
 
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .fa-trash-alt {
   font-size: 1.2rem;
   color: rgba(251, 191, 36, 1);
@@ -172,6 +208,10 @@ tr {
 @media only screen and (max-width: 420px) {
   .display-hidden {
     display: none;
+  }
+
+  .lead {
+    font-size: 1rem;
   }
 
   .display-show {

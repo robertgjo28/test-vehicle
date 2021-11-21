@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitForm" ref="modelWrap" @click="checkClick">
+  <form @submit.prevent="submitForm">
     <div class="mt-5 mb-5">
       <div class="row">
         <!-- NAME -->
@@ -236,7 +236,7 @@ export default {
   components: {
     Modal,
   },
-
+  // Composition API
   setup() {
     const state = reactive({
       vehicleName: "",
@@ -303,6 +303,8 @@ export default {
     return { state, v$, isFormValid };
   },
 
+  // Option API
+
   data() {
     return {
       docId: uid(6),
@@ -333,22 +335,16 @@ export default {
   },
 
   methods: {
-    getFullPlateNumber() {
-      return `${this.firstLicence}-${this.numberLicence}-${this.lastLicence}`;
+    getLocalDate(date) {
+      return new Date(date).toLocaleDateString("en-us", this.dateOptions);
     },
 
     getRegDate() {
-      return new Date(this.state.registrationDate).toLocaleDateString(
-        "en-us",
-        this.dateOptions
-      );
+      return this.getLocalDate(this.state.registrationDate);
     },
 
     getRegSub() {
-      return new Date(this.state.registrationSubmission).toLocaleDateString(
-        "en-us",
-        this.dateOptions
-      );
+      return this.getLocalDate(this.state.registrationSubmission);
     },
 
     filterModels() {
@@ -376,12 +372,6 @@ export default {
         registrationDate: this.getRegDate(),
         registrationSubmission: this.getRegSub(),
       };
-    },
-
-    closeClick(e) {
-      if (e.target === this.$refs.modelWrap) {
-        this.modal = false;
-      }
     },
 
     dateToYYYYMMDD(d) {

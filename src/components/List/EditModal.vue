@@ -1,118 +1,90 @@
 <template>
-  <!-- Modal -->
-  <div
-    class="modal fade"
-    id="editModal"
-    tabindex="-1"
-    aria-labelledby="editModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="heading" id="editModalLabel">Edit Vehilce</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+  <main>
+    <div class="behind"></div>
+    <div class="my-modal">
+      <h3 class="heading mb-4">Edit informations</h3>
+      <hr style="border: 1px dashed #d1d1d1" />
+      <form class="mt-4">
+        <div class="row">
+          <label for="name" class="form-label">Vehilce Name: </label>
+          <input
+            id="name"
+            type="text"
+            class="form-control mb-3"
+            v-model="editedVehicle.vehicleName"
+            required
+          />
+          <label for="type" class="form-label">Vehilce Type</label>
+          <input
+            id="type"
+            type="text"
+            class="form-control mb-3"
+            v-model="editedVehicle.vehicleType"
+            required
+          />
+          <hr class="my-4" style="border: 1px dashed #d1d1d1" />
+          <label for="plateNumberMasked" class="form-label"
+            >License Plate</label
+          >
+          <input
+            id="plateNumberMasked"
+            type="text"
+            v-maska="'SS-XXXX-SS'"
+            class="form-control text-uppercase mb-3"
+            v-model="editedVehicle.plateNumber"
+            required
+          />
+          <label for="model" class="form-label">Model</label>
+          <input
+            id="model"
+            type="text"
+            class="form-control mb-4"
+            v-model="editedVehicle.model"
+            required
+          />
         </div>
-        <div class="modal-body px-5">
-          <form>
-            <div class="row">
-              <label for="name" class="form-label">Vehilce Name: </label>
-              <input
-                id="name"
-                type="text"
-                class="form-control mb-3"
-                @input="vehicleName = $event.target.value"
-                :value="vehicle.vehicleName"
-                required
-              />
-              <label for="type" class="form-label">Vehilce Type</label>
-              <input
-                id="type"
-                type="text"
-                class="form-control mb-3"
-                @input="vehicleType = $event.target.value"
-                :value="vehicle.vehicleType"
-                required
-              />
-              <label for="plateNumberMasked" class="form-label"
-                >License Plate</label
-              >
-              <input
-                id="plateNumberMasked"
-                type="text"
-                v-maska="'SS-XXXX-SS'"
-                class="form-control text-uppercase mb-3"
-                @input="plateNumber = $event.target.value"
-                :value="vehicle.plateNumber"
-                required
-              />
-              <label for="model" class="form-label">Model</label>
-              <input
-                id="model"
-                type="text"
-                class="form-control mb-4"
-                @input="model = $event.target.value"
-                :value="vehicle.model"
-                required
-              />
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-closed"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                type="submit"
-                @click.prevent="editVehilce"
-                class="btn btn-submit"
-              >
-                Save changes
-              </button>
-            </div>
-          </form>
+        <hr style="border: 1px dashed #d1d1d1" />
+        <div class="modal-footer">
+          <button type="button" class="btn btn-closed" @click.prevent="onClose">
+            Save Changes
+          </button>
         </div>
-      </div>
+      </form>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
 export default {
   name: "EditModal",
-
   props: {
     vehicle: {
       type: Object,
       required: true,
     },
   },
+  created() {
+    this.editedVehicle = this.vehicle;
+  },
   data() {
     return {
-      vehEdit: null,
-      vehicleName: "",
-      vehicleType: "",
-      plateNumber: "",
-      model: "",
+      editedVehicle: {
+        vehicleName: "",
+        vehicleType: "",
+        plateNumber: "",
+        model: "",
+      },
     };
   },
   methods: {
-    editVehilce() {
-      this.vehEdit = {
-        vehicleName: this.vehicleName,
-        vehicleType: this.vehicleType,
-        plateNumber: this.plateNumber,
-        model: this.model,
-      };
-
-      console.log(this.vehEdit);
+    onClose() {
+      this.$emit("modal-closed");
+    },
+    onSave() {
+      this.$emit("vehicle-updated", {
+        index: this.index,
+        vehicle: this.editedVehicle,
+      });
     },
   },
 };
@@ -161,5 +133,43 @@ input:focus {
   padding-left: 0.5rem;
   padding-top: 0.5rem;
   font-weight: bold;
+}
+
+.my-modal {
+  position: absolute;
+  width: 70%;
+  z-index: 99999;
+  background: #fff;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 75px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s ease-in;
+}
+
+.behind {
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.modal-footer {
+  border-top: 0;
+}
+
+@media only screen and (max-width: 430px) {
+  .my-modal {
+    width: 100%;
+    margin-top: 100px;
+  }
+  .behind {
+    height: 1000px;
+  }
 }
 </style>

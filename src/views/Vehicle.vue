@@ -1,8 +1,10 @@
 <template>
-  <div class="text-center mt-5">
-    <h1 class="heading">Vehicle List</h1>
-  </div>
-  <the-grid></the-grid>
+  <main>
+    <div class="text-center mt-5">
+      <h1 class="heading">Vehicle List</h1>
+    </div>
+    <the-grid></the-grid>
+  </main>
 </template>
 
 <script>

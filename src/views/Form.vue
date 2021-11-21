@@ -1,14 +1,16 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-6 offset-md-1 pt-5 mt-5 ps-5 media-left">
-        <div class="container">
-          <entry-form></entry-form>
+  <main>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6 offset-md-1 pt-5 mt-5 ps-5 media-left">
+          <div class="container">
+            <entry-form></entry-form>
+          </div>
         </div>
+        <div class="col-md-4 offset-md-1 background-env"></div>
       </div>
-      <div class="col-md-4 offset-md-1 background-env"></div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
