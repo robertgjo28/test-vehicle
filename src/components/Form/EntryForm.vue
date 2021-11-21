@@ -1,7 +1,7 @@
 <template>
   <div class="pb-5">
-    <div class="row mb-5 ps-3">
-      <div class="col-6">
+    <div class="row mb-5 ps-3 padding-left-0">
+      <div class="col-6 col-md-8 width-form">
         <h1 class="headingForm">Input vehicle information</h1>
       </div>
     </div>
@@ -85,5 +85,18 @@ ul {
   border: solid #d1d1d1;
   border-width: 1px 1px 0 1px;
   padding: 0.6rem 0.75rem;
+}
+
+@media only screen and (max-width: 420px) {
+  .headingForm {
+    font-size: 40px;
+  }
+  .width-form {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .padding-left-0 {
+    padding-left: 0 !important;
+  }
 }
 </style>

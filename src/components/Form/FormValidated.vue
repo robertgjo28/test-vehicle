@@ -3,7 +3,7 @@
     <div class="mt-5 mb-5">
       <div class="row">
         <!-- NAME -->
-        <div class="col-md-6">
+        <div class="col-md-6 margin-bottom-enough">
           <label for="vehicleName" class="form-label">Vehicle name</label>
           <input
             type="text"
@@ -98,7 +98,7 @@
       <!-- PLATES -->
       <div class="col-12">
         <div class="row">
-          <div class="col-md-6 mt-4">
+          <div class="col-md-6 mt-4 margin-bottom-enough">
             <label for="plateNumberMasked" class="form-label"
               >License Plate</label
             >
@@ -107,6 +107,7 @@
               type="text"
               class="form-control text-uppercase"
               v-maska="'SS-XXXX-SS'"
+              placeholder="XX-NNNN-XX"
               @blur="v$.licensePlate.$touch"
               v-model="state.licensePlate"
               :class="{
@@ -135,7 +136,7 @@
       <hr style="border: 1px dashed #d1d1d1" />
       <!-- Registration -->
       <div class="row mt-5 mb-5">
-        <div class="col-md-6 pe-3">
+        <div class="col-md-6 pe-3 margin-bottom-enough">
           <label for="lastReg" class="form-label">Last registration date</label>
           <input
             type="date"
@@ -488,5 +489,21 @@ ul {
 
 .borderGreen {
   border-color: green;
+}
+
+@media only screen and (max-width: 420px) {
+  .margin-bottom-enough {
+    margin-bottom: 1.5rem;
+  }
+  .auto-complete {
+    width: 283.3px;
+    background-color: #fff;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .auto-complete {
+    width: 308.4px;
+    background-color: #fff;
+  }
 }
 </style>

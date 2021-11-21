@@ -1,18 +1,18 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light py-4 bg-gray">
-    <div class="container">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-gray">
+    <div class="container py-3">
       <button
         class="navbar-toggler"
         type="button"
-        data-toggle="collapse"
-        data-target="#navbarText"
-        aria-controls="navbarText"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarText">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
           <li class="nav-item">
             <router-link
@@ -46,5 +46,18 @@
 
 .text-nav-color:hover {
   color: rgba(251, 191, 36, 1);
+}
+
+@media only screen and (max-width: 810px) {
+  .text-nav-color {
+    padding: 0 !important;
+  }
+  .nav-item {
+    padding-top: 25px;
+    padding-left: 15px;
+  }
+  .nav-item:nth-child(2) {
+    padding-bottom: 20px;
+  }
 }
 </style>

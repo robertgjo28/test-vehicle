@@ -10,7 +10,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel">Edit Vehilce</h5>
+          <h5 class="heading" id="editModalLabel">Edit Vehilce</h5>
           <button
             type="button"
             class="btn-close"
@@ -19,14 +19,15 @@
           ></button>
         </div>
         <div class="modal-body px-5">
-          <form>
+          <form @submit.prevent="editVehilce">
             <div class="row">
               <label for="name" class="form-label">Vehilce Name: </label>
               <input
                 id="name"
                 type="text"
                 class="form-control mb-3"
-                v-model="vehilceEdit.name"
+                @input="name"
+                :value="vehicle.vehicleName"
                 required
               />
               <label for="type" class="form-label">Vehilce Type</label>
@@ -34,7 +35,8 @@
                 id="type"
                 type="text"
                 class="form-control mb-3"
-                v-model="vehilceEdit.type"
+                @input="vehicleType"
+                :value="vehicle.vehicleType"
                 required
               />
               <label for="plateNumberMasked" class="form-label"
@@ -45,7 +47,8 @@
                 type="text"
                 v-maska="'SS-XXXX-SS'"
                 class="form-control text-uppercase mb-3"
-                v-model="vehilceEdit.licensePlate"
+                @input="plateNumber"
+                :value="vehicle.plateNumber"
                 required
               />
               <label for="model" class="form-label">Model</label>
@@ -53,7 +56,8 @@
                 id="model"
                 type="text"
                 class="form-control mb-4"
-                v-model="vehilceEdit.model"
+                @input="model"
+                :value="vehicle.model"
                 required
               />
             </div>
@@ -65,14 +69,7 @@
               >
                 Close
               </button>
-              <button
-                type="submit"
-                @click.prevent="editVehilce"
-                class="btn btn-submit"
-                :data-bs-dismiss="toggleModal"
-              >
-                Save changes
-              </button>
+              <button type="submit" class="btn btn-submit">Save changes</button>
             </div>
           </form>
         </div>
@@ -82,22 +79,39 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  name: "EditModal",
+
+  props: ["vehicle"],
   data() {
     return {
-      vehilceEdit: {
-        name: "",
-        type: "",
-        licensePlate: "",
-        model: "",
-      },
-      toggleModal: false,
+      name: "",
+      vehicleType: "",
+      plateNumber: "",
+      model: "",
+      vehEdit: {},
     };
+  },
+
+  computed: {
+    ...mapState(["currentItem"]),
   },
 
   methods: {
     editVehilce() {
-      console.log(this.vehilceEdit);
+      this.vehEdit = {};
+
+      this.vehEdit = {
+        name: this.name,
+        vehicleType: this.vehicleType,
+        plateNumber: this.plateNumber,
+        model: this.model,
+      };
+
+      this.$store.dispatch("GET_CHANGED_ITEM", this.vehEdit);
+      console.log(this.vehEdit);
     },
   },
 };
@@ -142,7 +156,9 @@ input:focus {
 }
 .heading {
   color: #42505c;
-  font-size: 54px;
+  font-size: 37px;
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
   font-weight: bold;
 }
 </style>

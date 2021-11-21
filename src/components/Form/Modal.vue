@@ -32,22 +32,28 @@
               <div class="col-12 pb-2">
                 <h4>You've entered the following informations:</h4>
               </div>
-              <div class="col-12 py-2 ps-3">
+              <div class="col-12 py-2 ps-3 padding-0">
                 <p>
-                  <span class="fw-bold me-2">Name of the vehicle:</span>
+                  <span class="fw-bold me-2 width-100"
+                    >Name of the vehicle:</span
+                  >
                   {{ results.vehicleName }}
                 </p>
               </div>
-              <div class="col-12 py-2 ps-3">
+              <div class="col-12 py-2 ps-3 padding-0">
                 <p>
-                  <span class="fw-bold me-2">Type of the vehicle:</span>
+                  <span class="fw-bold me-2 width-100"
+                    >Type of the vehicle:</span
+                  >
                   {{ results.vehicleType }}
                 </p>
               </div>
-              <div class="col-12 py-2 ps-3">
+              <div class="col-12 py-2 ps-3 padding-0">
                 <p>
-                  <span class="fw-bold me-2">Model of the vehicle:</span>
-                  <span class="text-capitalize">{{
+                  <span class="fw-bold me- width-1002"
+                    >Model of the vehicle:</span
+                  >
+                  <span class="text-capitalize ms-1">{{
                     results.vehicleModel != ""
                       ? results.vehicleModel
                       : "Unknown"
@@ -55,10 +61,10 @@
                 </p>
               </div>
               <hr style="border: 1px dashed #d1d1d1" />
-              <div class="col-12 pt-4">
+              <div class="col-12 pt-4 padding-0">
                 <h4>License plate & Registration:</h4>
               </div>
-              <div class="col-12 pt-3 pb-1 ps-3">
+              <div class="col-12 pt-3 pb-1 ps-3 padding-0">
                 <p>
                   <span class="fw-bold me-2">License plate number: </span>
                   <span class="text-uppercase">
@@ -66,17 +72,17 @@
                   >
                 </p>
               </div>
-              <div class="col-12 py-2 ps-3">
+              <div class="col-12 py-2 ps-3 padding-0">
                 <p>
-                  <span class="fw-bold me-2"
+                  <span class="fw-bold me-2 width-100"
                     >Your last registration date is:</span
                   >
                   {{ results.registrationDate }}
                 </p>
               </div>
-              <div class="col-12 py-2 ps-3">
+              <div class="col-12 py-2 ps-3 padding-0">
                 <p>
-                  <span class="fw-bold me-2"
+                  <span class="fw-bold me-2 width-100"
                     >New registration submission on:</span
                   >
                   {{ results.registrationSubmission }}
@@ -169,5 +175,38 @@ export default {
 }
 .modal-footer {
   border: none;
+}
+
+@media only screen and (max-width: 810px) {
+  .modal-content {
+    width: 73%;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .modal-content {
+    width: 39%;
+  }
+  .modal-title {
+    font-size: 30px;
+  }
+  h4 {
+    font-size: 1.1rem;
+  }
+  .btn-submit {
+    margin: 0 !important;
+  }
+  .btn-print {
+    display: none;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .modal-content {
+    width: 35%;
+  }
+
+  .padding-0 {
+    padding-left: 0 !important;
+  }
 }
 </style>
