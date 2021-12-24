@@ -1,4 +1,4 @@
-# test-vehicle Bransys
+# test-vehicle
 
 ## Project setup
 ```
